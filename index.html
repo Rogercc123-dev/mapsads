@@ -1,101 +1,136 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="MapsAds — claim and grow territory across the world." />
-  <title>MapsAds — Own the World</title>
-  <style>
-    :root{--bg:#08090b;--panel:#101216;--panel2:#15171c;--line:#292d35;--text:#f3f4f6;--muted:#8b919c;--accent:#fff;--mine:#f5f5f5;--mine2:#bfc3ca;--danger:#ff6b6b;--green:#62d996}
-    *{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit;color:inherit}body{overflow:hidden}
-    .app{height:100%;display:grid;grid-template-rows:64px 1fr}.top{display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:rgba(8,9,11,.94);z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}.mark{width:27px;height:27px;border:2px solid #fff;border-radius:7px;display:grid;place-items:center;font-size:12px}.brand span{font-size:18px}.stats{display:flex;gap:24px;align-items:center}.stat{display:flex;gap:7px;align-items:baseline}.stat b{font-size:14px}.stat small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.profile{border:1px solid var(--line);background:var(--panel);padding:8px 12px;border-radius:9px;font-size:12px;font-weight:700}
-    .workspace{position:relative;min-height:0}.map-wrap{position:absolute;inset:0;background:radial-gradient(circle at 50% 44%,#15181d 0,#0d0f13 48%,#08090b 100%)}svg{width:100%;height:100%;display:block;cursor:grab}svg.dragging{cursor:grabbing}.country{stroke:#3b3f47;stroke-width:.55px;vector-effect:non-scaling-stroke;transition:fill .18s,stroke .18s,filter .18s;cursor:pointer}.country:hover{stroke:#fff;stroke-width:1px;filter:brightness(1.3)}.country.mine{stroke:#fff;stroke-width:1px}.country.enemy{opacity:.95}.country.unowned{fill:#252931}.country.mine{fill:#dfe2e7}.country.enemy-a{fill:#6b3a45}.country.enemy-b{fill:#3d5870}.country.enemy-c{fill:#665438}.country.enemy-d{fill:#3f6653}.country.enemy-e{fill:#5c4b75}.country.flash{animation:flash .7s ease}@keyframes flash{50%{filter:brightness(2.2)}}
-    .side{position:absolute;right:18px;top:18px;width:315px;max-height:calc(100% - 36px);background:rgba(16,18,22,.96);border:1px solid var(--line);border-radius:13px;backdrop-filter:blur(12px);overflow:hidden;box-shadow:0 14px 45px rgba(0,0,0,.35)}.side-head{padding:18px 18px 14px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase}.country-name{font-size:25px;font-weight:800;letter-spacing:-.04em;margin-top:4px}.owner{margin-top:6px;color:var(--muted);font-size:12px}.owner strong{color:var(--text)}.side-body{padding:16px 18px}.kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid #202329;font-size:12px}.kv span:first-child{color:var(--muted)}.action{width:100%;margin-top:15px;border:0;border-radius:9px;padding:12px 14px;background:#f3f4f6;color:#090a0c;font-weight:800;cursor:pointer}.action:disabled{opacity:.35;cursor:not-allowed}.hint{font-size:11px;color:var(--muted);line-height:1.5;margin-top:9px}.activity{border-top:1px solid var(--line);padding:13px 18px}.activity-title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:9px}.feed{display:flex;flex-direction:column;gap:9px}.feed-item{font-size:11px;color:#c3c7ce;display:flex;gap:7px;line-height:1.35}.dot{width:5px;height:5px;border-radius:50%;background:#fff;margin-top:5px;flex:0 0 auto}
-    .legend{position:absolute;left:18px;bottom:18px;background:rgba(16,18,22,.9);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:10px;color:var(--muted);display:flex;gap:15px}.legend-item{display:flex;gap:6px;align-items:center}.swatch{width:9px;height:9px;border-radius:2px}.swatch.mine{background:#dfe2e7}.swatch.other{background:#6b3a45}.swatch.free{background:#252931}
-    .zoom{position:absolute;left:18px;top:18px;display:flex;flex-direction:column;background:rgba(16,18,22,.92);border:1px solid var(--line);border-radius:9px;overflow:hidden}.zoom button{width:38px;height:38px;background:transparent;border:0;border-bottom:1px solid var(--line);cursor:pointer;font-size:19px}.zoom button:last-child{border-bottom:0}.zoom button:hover{background:#1a1d23}
-    .toast{position:absolute;left:50%;top:82px;transform:translateX(-50%) translateY(-10px);background:#f3f4f6;color:#090a0c;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-    @media(max-width:800px){.stats{display:none}.top{padding:0 14px}.side{left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:45%}.legend{display:none}.zoom{top:12px;left:12px}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="MapsAds — advertise on the world map. Buy countries, grow your footprint, and outbid for premium territory." />
+<meta name="theme-color" content="#07080a" />
+<title>MapsAds — Advertise on the World</title>
+<style>
+:root{--bg:#07080a;--panel:#0d0f13;--panel2:#13161b;--panel3:#191c22;--line:#292e36;--text:#f5f6f8;--muted:#8e95a1;--green:#70e2a0;--yellow:#f0cb70;--land:#242830;--mine:#e9ecf0}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{overflow:hidden}button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.app{height:100vh;display:grid;grid-template-rows:64px 1fr}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 20px;border-bottom:1px solid var(--line);background:rgba(7,8,10,.96);backdrop-filter:blur(12px);z-index:20}.brand{display:flex;align-items:center;gap:11px;min-width:210px}.mark{width:30px;height:30px;border:1.5px solid #fff;border-radius:8px;display:grid;place-items:center;font-weight:900;font-size:12px}.brandName{font-size:18px;font-weight:900;letter-spacing:-.05em}.brandSub{font-size:10px;color:var(--muted);margin-left:5px}.nav{display:flex;gap:3px}.nav button{border:0;background:transparent;color:var(--muted);padding:9px 12px;border-radius:8px;font-size:11px;font-weight:800}.nav button:hover,.nav button.active{background:var(--panel2);color:var(--text)}.account{display:flex;align-items:center;gap:10px;min-width:210px;justify-content:flex-end}.balance{font-size:10px;color:var(--muted)}.profileBtn{border:1px solid var(--line);background:var(--panel2);border-radius:9px;padding:8px 11px;font-size:10px;font-weight:900}
+.workspace{position:relative;min-height:0;overflow:hidden;background:#0b1018}.mapWrap{position:absolute;inset:0;background:radial-gradient(circle at 48% 43%,#151a21 0,#0d1219 48%,#07080a 100%)}#map{width:100%;height:100%;display:block;cursor:grab}.country{fill:var(--land);stroke:#464c56;stroke-width:.45;vector-effect:non-scaling-stroke;cursor:pointer;transition:filter .16s,stroke .16s,fill .16s}.country:hover{filter:brightness(1.2);stroke:#f3f4f7;stroke-width:1}.country.mine{fill:var(--mine);stroke:#fff;stroke-width:1.15}.country.claimed{filter:saturate(.9)}.brandPin{pointer-events:none}.brandPin rect{fill:rgba(7,8,10,.9);stroke:rgba(255,255,255,.16)}.brandPin text{fill:#fff;font-size:9px;font-weight:850;dominant-baseline:middle}
+.controls{position:absolute;left:16px;top:16px;z-index:8}.controlGroup{display:flex;flex-direction:column;overflow:hidden;background:rgba(13,15,19,.93);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.25)}.control{width:40px;height:40px;background:transparent;border:0;border-bottom:1px solid var(--line);font-size:18px}.control:last-child{border-bottom:0}.control:hover{background:var(--panel3)}.hint{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:7;background:rgba(13,15,19,.86);border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:9px;letter-spacing:.08em;white-space:nowrap}.legend{position:absolute;left:16px;bottom:16px;z-index:8;display:flex;gap:15px;padding:10px 12px;border:1px solid var(--line);background:rgba(13,15,19,.9);border-radius:10px;color:var(--muted);font-size:9px}.legend span{display:flex;align-items:center;gap:6px}.sw{width:9px;height:9px;border-radius:2px;display:block}.sw.free{background:var(--land)}.sw.claimed{background:#56606e}.sw.mine{background:var(--mine)}
+.side{position:absolute;right:16px;top:16px;width:365px;max-height:calc(100% - 32px);overflow:auto;background:rgba(13,15,19,.96);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(16px);z-index:10;box-shadow:0 18px 60px rgba(0,0,0,.38)}.sideHeader{padding:18px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.13em}.countryName{font-size:29px;line-height:1;font-weight:900;letter-spacing:-.05em;margin-top:6px}.status{color:var(--muted);font-size:11px;margin-top:8px}.status strong{color:var(--text)}.adCard{margin:14px 18px 0;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--panel2)}.adTop{display:flex;gap:10px;align-items:center}.adLogo{width:43px;height:43px;border-radius:9px;border:1px solid var(--line);background:#252a31;display:grid;place-items:center;overflow:hidden;font-weight:900}.adLogo img{width:100%;height:100%;object-fit:cover}.adName{font-size:14px;font-weight:900}.adSite{color:var(--muted);font-size:9px;margin-top:2px}.adTag{color:#c4c9d0;font-size:11px;line-height:1.45;margin-top:10px}.adStats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.stat{padding:8px;border:1px solid var(--line);border-radius:8px}.stat span{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.08em}.stat b{display:block;margin-top:3px;font-size:10px}.body{padding:14px 18px}.kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid #20242b;font-size:11px}.kv span:first-child{color:var(--muted)}.cta{width:100%;border:0;background:#f3f4f6;color:#090a0c;border-radius:9px;padding:12px 14px;font-weight:900;font-size:11px;margin-top:14px}.cta.secondary{background:var(--panel3);border:1px solid var(--line);color:var(--text)}.cta:disabled{opacity:.38;cursor:not-allowed}.notice{font-size:10px;color:var(--muted);line-height:1.5;margin-top:9px}.green{color:var(--green)}.yellow{color:var(--yellow)}.feedBox{border-top:1px solid var(--line);padding:14px 18px 16px}.feedTitle{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.13em;margin-bottom:10px}.feed{display:flex;flex-direction:column;gap:8px}.feedItem{display:flex;gap:8px;color:#c1c6ce;font-size:10px;line-height:1.4}.feedDot{width:5px;height:5px;background:#fff;border-radius:50%;margin-top:4px;flex:none}
+.modalBack{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.7);z-index:60}.modalBack.open{display:flex}.modal{width:min(540px,100%);max-height:92vh;overflow:auto;background:#0d0f13;border:1px solid var(--line);border-radius:16px;box-shadow:0 30px 100px rgba(0,0,0,.55)}.modalHead{display:flex;justify-content:space-between;gap:15px;padding:18px 20px;border-bottom:1px solid var(--line)}.modalTitle{font-size:20px;font-weight:900;letter-spacing:-.04em}.modalSub{font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px}.close{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);font-size:20px}.form{padding:18px 20px}.field{margin-bottom:14px}.field label{display:block;color:#b9bec7;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}.field input,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line2,#353b45);border-radius:8px;background:#090b0e;outline:none}.field textarea{min-height:72px;resize:vertical}.field input:focus,.field textarea:focus{border-color:#7b838f}.bidHint{color:var(--muted);font-size:9px;margin-top:6px}.preview{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);background:var(--panel2);border-radius:9px;margin-bottom:15px}.previewLogo{width:38px;height:38px;border-radius:8px;display:grid;place-items:center;overflow:hidden;background:#262b32;border:1px solid var(--line);font-weight:900}.previewLogo img{width:100%;height:100%;object-fit:cover}.previewName{font-size:12px;font-weight:900}.previewSite{font-size:9px;color:var(--muted);margin-top:2px}.submit{display:flex;gap:9px}.submit button{flex:1}.profileGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+@media(max-width:1050px){.nav{display:none}.side{width:335px}.balance{display:none}}
+@media(max-width:760px){body{overflow:auto}.app{height:auto;min-height:100vh;grid-template-rows:58px auto}.top{height:58px;padding:0 12px}.brand{min-width:auto}.brandSub{display:none}.account{min-width:auto}.workspace{height:calc(100vh - 58px);min-height:720px}.side{left:12px;right:12px;bottom:12px;top:auto;width:auto;max-height:47%}.hint{max-width:67%;overflow:hidden;text-overflow:ellipsis}.legend{display:none}.controls{top:12px;left:12px}.profileGrid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
 </head>
 <body>
-<div class="app" id="app">
-  <header class="top">
-    <div class="brand"><div class="mark">M</div><span>mapsads</span></div>
-    <div class="stats"><div class="stat"><b id="claimedCount">0</b><small>claimed</small></div><div class="stat"><b id="territoryCount">0 km²</b><small>your territory</small></div><div class="stat"><b id="onlineCount">1,284</b><small>online</small></div></div>
-    <button class="profile" type="button">ROGER · 0 COINS</button>
-  </header>
-  <main class="workspace">
-    <div class="map-wrap"><svg id="map" viewBox="0 0 1200 650" role="img" aria-label="Interactive world territory map"></svg></div>
-    <div class="zoom"><button id="zoomIn" type="button" aria-label="Zoom in">+</button><button id="zoomOut" type="button" aria-label="Zoom out">−</button><button id="reset" type="button" aria-label="Reset map">⌂</button></div>
-    <aside class="side" aria-live="polite">
-      <div class="side-head"><div class="eyebrow">Territory</div><div class="country-name" id="selectedName">Select a country</div><div class="owner" id="selectedOwner">Click anywhere on the map to inspect it.</div></div>
-      <div class="side-body">
-        <div class="kv"><span>Status</span><b id="selectedStatus">—</b></div>
-        <div class="kv"><span>Area</span><b id="selectedArea">—</b></div>
-        <div class="kv"><span>Neighbours owned</span><b id="selectedNeighbours">—</b></div>
-        <button class="action" id="claim" type="button" disabled>Claim territory</button>
-        <div class="hint" id="hint">Choose a free country to start building your territory. Expansion is limited to countries touching your existing land.</div>
-      </div>
-      <div class="activity"><div class="activity-title">Live activity</div><div class="feed" id="feed"></div></div>
-    </aside>
-    <div class="legend"><div class="legend-item"><i class="swatch mine"></i>Your land</div><div class="legend-item"><i class="swatch other"></i>Claimed</div><div class="legend-item"><i class="swatch free"></i>Available</div></div>
-    <div class="toast" id="toast"></div>
-  </main>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="mark">M</div><div><span class="brandName">mapsads</span><span class="brandSub">advertise on the world</span></div></div>
+  <nav class="nav"><button class="active" type="button">Explore</button><button id="howBtn" type="button">How it works</button><button id="advertiseBtn" type="button">Advertise</button></nav>
+  <div class="account"><span class="balance" id="balance">Demo balance · 10,000 credits</span><button class="profileBtn" id="profileBtn" type="button">YOUR BRAND</button></div>
+</header>
+<main class="workspace">
+  <div class="mapWrap"><svg id="map" viewBox="0 0 1200 650" aria-label="Interactive world advertising map"></svg></div>
+  <div class="hint">CLICK A COUNTRY TO SEE THE ADVERTISEMENT · AVAILABLE SPACE CAN BE BOUGHT · CLAIMED SPACE CAN BE OUTBID</div>
+  <div class="controls"><div class="controlGroup"><button class="control" id="zoomIn" type="button" aria-label="Zoom in">+</button><button class="control" id="zoomOut" type="button" aria-label="Zoom out">−</button><button class="control" id="reset" type="button" aria-label="Reset map">⌂</button></div></div>
+  <div class="legend"><span><i class="sw free"></i>Available</span><span><i class="sw claimed"></i>Advertised</span><span><i class="sw mine"></i>Your ads</span></div>
+  <aside class="side" aria-live="polite">
+    <div class="sideHeader"><div class="eyebrow">Advertising territory</div><div class="countryName" id="countryName">Select a country</div><div class="status" id="status">Click any country to inspect its advertising space.</div></div>
+    <div id="adWrap"></div>
+    <div class="body">
+      <div class="kv"><span>Area</span><b id="area">—</b></div><div class="kv"><span>Current bid</span><b id="bid">—</b></div><div class="kv"><span>Est. monthly views</span><b id="views">—</b></div><div class="kv"><span>Adjacent to your territory</span><b id="adjacent">—</b></div>
+      <button class="cta" id="buy" type="button" disabled>Choose a country</button>
+      <div class="notice" id="notice">Advertising is the core product: your brand name, website, logo and message are displayed on the country you own.</div>
+    </div>
+    <div class="feedBox"><div class="feedTitle">Live market</div><div class="feed" id="feed"></div></div>
+  </aside>
+</main>
 </div>
+
+<div class="modalBack" id="adModal" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true">
+  <div class="modalHead"><div><div class="modalTitle" id="adTitle">Advertise</div><div class="modalSub" id="adSub">Make this country your advertising placement.</div></div><button class="close" id="closeAd" type="button" aria-label="Close">×</button></div>
+  <form class="form" id="adForm">
+    <div class="preview"><div class="previewLogo" id="previewLogo">LOGO</div><div><div class="previewName" id="previewName">Your brand</div><div class="previewSite" id="previewSite">yoursite.com</div></div></div>
+    <div class="field"><label for="brandName">Brand / advertiser name</label><input id="brandName" required maxlength="48" placeholder="Your company or project" /></div>
+    <div class="field"><label for="website">Website URL</label><input id="website" type="url" required maxlength="180" placeholder="https://example.com" /></div>
+    <div class="field"><label for="logoUrl">Logo URL</label><input id="logoUrl" type="url" maxlength="300" placeholder="https://example.com/logo.png" /></div>
+    <div class="field"><label for="tagline">Ad message</label><textarea id="tagline" maxlength="120" placeholder="A short sentence shown with your advertisement."></textarea></div>
+    <div class="field"><label for="bidInput">Your bid</label><input id="bidInput" type="number" min="1" step="1" required /><div class="bidHint" id="bidHint"></div></div>
+    <div class="submit"><button class="cta secondary" id="cancelAd" type="button">Cancel</button><button class="cta" type="submit">Publish advertisement</button></div>
+  </form>
+</section></div>
+
+<div class="modalBack" id="profileModal" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true">
+  <div class="modalHead"><div><div class="modalTitle">Advertiser profile</div><div class="modalSub">Save your brand details once and reuse them for new placements.</div></div><button class="close" id="closeProfile" type="button" aria-label="Close">×</button></div>
+  <form class="form" id="profileForm"><div class="profileGrid">
+    <div class="field"><label for="profileName">Brand name</label><input id="profileName" maxlength="48" placeholder="Your brand" /></div>
+    <div class="field"><label for="profileSite">Website</label><input id="profileSite" type="url" maxlength="180" placeholder="https://example.com" /></div>
+    <div class="field full"><label for="profileLogo">Logo URL</label><input id="profileLogo" type="url" maxlength="300" placeholder="https://example.com/logo.png" /></div>
+    <div class="field full"><label for="profileTag">Tagline</label><input id="profileTag" maxlength="120" placeholder="What should your ad say?" /></div>
+  </div><div class="submit"><button class="cta secondary" id="cancelProfile" type="button">Cancel</button><button class="cta" type="submit">Save profile</button></div></form>
+</section></div>
+
+<div class="modalBack" id="howModal" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true">
+  <div class="modalHead"><div><div class="modalTitle">How MapsAds works</div><div class="modalSub">The map is the advertising inventory.</div></div><button class="close" id="closeHow" type="button" aria-label="Close">×</button></div>
+  <div class="form"><div class="kv"><span>1 · Select</span><b>Choose any country on the world map</b></div><div class="kv"><span>2 · Advertise</span><b>Add your name, site, logo and message</b></div><div class="kv"><span>3 · Buy</span><b>Available territory starts with an opening bid</b></div><div class="kv"><span>4 · Compete</span><b>Anyone can outbid the current advertiser</b></div><div class="kv"><span>5 · Grow</span><b>Expand your footprint with adjacent available countries</b></div><div class="notice">Prototype mode uses demo credits and browser storage. Production payments, accounts, auctions and live ad delivery can be connected to a backend next.</div><button class="cta" id="closeHow2" type="button">Back to map</button></div>
+</section></div>
+
 <script type="module">
 (async()=>{
-  const root=document.getElementById('app');
-  const svg=document.getElementById('map');
   const d3=await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
   const topo=await import('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm');
   const world=await import('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json/+esm');
-  const countries=topo.feature(world.default,world.default.objects.countries).features;
-  const projection=d3.geoNaturalEarth1().fitExtent([[15,18],[1185,632]],{type:'Sphere'});
-  const path=d3.geoPath(projection);
-  const g=d3.select(svg).append('g');
-  const defs=d3.select(svg).append('defs');
-  defs.append('filter').attr('id','countryShadow').append('feDropShadow').attr('dx',0).attr('dy',1).attr('stdDeviation',1.5).attr('flood-opacity',.25);
-  const names={};
-  // ISO numeric IDs for seeded prototype ownership.
-  const seed={372:{owner:'ROGER',class:'mine'},826:{owner:'NORTHSTAR',class:'enemy-a'},250:{owner:'NORTHSTAR',class:'enemy-a'},724:{owner:'NORTHSTAR',class:'enemy-a'},276:{owner:'ATLAS',class:'enemy-b'},380:{owner:'ATLAS',class:'enemy-b'},156:{owner:'PACIFIC',class:'enemy-c'},392:{owner:'PACIFIC',class:'enemy-c'},36:{owner:'ORBIT',class:'enemy-d'},554:{owner:'ORBIT',class:'enemy-d'},76:{owner:'NOVA',class:'enemy-e'},32:{owner:'NOVA',class:'enemy-e'}};
-  const area={372:70273,826:243610,250:551695,724:505990,276:357022,380:301340,156:9596961,392:377975,36:7692024,554:268021,76:8515767,32:2780400};
-  const idToName={372:'Ireland',826:'United Kingdom',250:'France',724:'Spain',276:'Germany',380:'Italy',156:'China',392:'Japan',36:'Australia',554:'New Zealand',76:'Brazil',32:'Argentina'};
-  const byId=new Map(countries.map(c=>[+c.id,c]));
-  const ownership=new Map(Object.entries(seed).map(([id,v])=>[+id,v]));
-  let selected=null; let transform=d3.zoomIdentity;
-  const projectionBounds=projection;
-  const countryPaths=g.selectAll('path.country').data(countries).join('path').attr('class',d=>`country ${ownership.get(+d.id)?.class||'unowned'}`).attr('d',path).attr('tabindex',0).attr('role','button').attr('aria-label',d=>idToName[d.id]||`Country ${d.id}`).on('click',(e,d)=>selectCountry(d)).on('keydown',(e,d)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCountry(d)}});
-  function adjacency(a,b){
-    // TopoJSON geometries can be compared using a small geographic distance between representative centroids.
-    // For this prototype, use shared boundary via polygon bbox proximity + centroid distance, with a generous threshold.
-    const ca=d3.geoCentroid(a), cb=d3.geoCentroid(b); const dist=d3.geoDistance(ca,cb); return dist<0.55;
+  const geo=topo.feature(world.default,world.default.objects.countries).features;
+  const svg=d3.select('#map'), g=svg.append('g');
+  const projection=d3.geoNaturalEarth1().fitExtent([[16,15],[1184,635]],{type:'Sphere'}), path=d3.geoPath(projection);
+  const byId=new Map(geo.map(d=>[+d.id,d]));
+  const seeded={
+    840:{owner:'VASTLY',site:'vastly.ai',tag:'AI growth tools for ambitious teams.',bid:4200,views:1480000,color:'#5f6a80',logo:'https://dummyimage.com/96x96/20252c/ffffff&text=V'},
+    826:{owner:'NORTHSTAR',site:'northstar.energy',tag:'Powering the next generation.',bid:3100,views:980000,color:'#654f59',logo:'https://dummyimage.com/96x96/24262d/ffffff&text=N'},
+    250:{owner:'ATLAS TRAVEL',site:'atlas.travel',tag:'See more. Go further.',bid:2700,views:860000,color:'#635949',logo:'https://dummyimage.com/96x96/25282d/ffffff&text=A'},
+    276:{owner:'FORGE',site:'forge.dev',tag:'Ship the software that matters.',bid:2250,views:720000,color:'#4e6277',logo:'https://dummyimage.com/96x96/24272f/ffffff&text=F'},
+    156:{owner:'PACIFIC',site:'pacific.group',tag:'Built for a connected world.',bid:1900,views:540000,color:'#456b68',logo:'https://dummyimage.com/96x96/242b2c/ffffff&text=P'},
+    392:{owner:'ORBITAL',site:'orbital.space',tag:'Space starts here.',bid:1750,views:410000,color:'#675275',logo:'https://dummyimage.com/96x96/29252e/ffffff&text=O'},
+    36:{owner:'OUTBACK',site:'outback.co',tag:'Go farther than expected.',bid:1450,views:390000,color:'#53695b',logo:'https://dummyimage.com/96x96/252b28/ffffff&text=O'},
+    76:{owner:'NOVA',site:'nova.com',tag:'Make the everyday remarkable.',bid:1300,views:350000,color:'#6b5560',logo:'https://dummyimage.com/96x96/2b2529/ffffff&text=N'},
+    380:{owner:'VERVE',site:'verve.it',tag:'Designed to move.',bid:1150,views:290000,color:'#645a42',logo:'https://dummyimage.com/96x96/292820/ffffff&text=V'},
+    724:{owner:'HELIO',site:'helio.es',tag:'Bright ideas for better days.',bid:950,views:210000,color:'#566b67',logo:'https://dummyimage.com/96x96/242b2b/ffffff&text=H'}
+  };
+  const names={840:'United States',826:'United Kingdom',250:'France',276:'Germany',156:'China',392:'Japan',36:'Australia',76:'Brazil',380:'Italy',724:'Spain',372:'Ireland',124:'Canada',32:'Argentina',152:'Chile',203:'Czechia',208:'Denmark',246:'Finland',250:'France',300:'Greece',348:'Hungary',352:'Iceland',356:'India',360:'Indonesia',376:'Israel',398:'Kazakhstan',410:'South Korea',428:'Latvia',440:'Lithuania',442:'Luxembourg',484:'Mexico',528:'Netherlands',554:'New Zealand',578:'Norway',586:'Pakistan',591:'Panama',604:'Peru',616:'Poland',620:'Portugal',642:'Romania',643:'Russia',688:'Serbia',703:'Slovakia',705:'Slovenia',710:'South Africa',752:'Sweden',756:'Switzerland',764:'Thailand',792:'Türkiye',804:'Ukraine',826:'United Kingdom',840:'United States',858:'Uruguay',860:'Uzbekistan',862:'Venezuela',704:'Vietnam'};
+  const areas={36:7692024,124:9984670,32:2780400,76:8515767,156:9596961,392:377975,410:100210,554:268021,724:505990,250:551695,276:357022,380:301340,826:243610,840:9833517,356:3287263,643:17098246,710:1221037,484:1964375,616:312696,528:41543};
+  const key='mapsads-prototype-v3'; let saved={}; try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{}
+  const ownership={...seeded,...(saved.ownership||{})}; let profile={name:saved.profile?.name||'',site:saved.profile?.site||'',logo:saved.profile?.logo||'',tag:saved.profile?.tag||''}; let selectedId=null; let credits=10000;
+  const countryName=id=>names[id]||byId.get(+id)?.properties?.name||`Country ${id}`;
+  const areaText=id=>(areas[id]||Math.max(1000,Math.round((d3.geoArea(byId.get(+id)||{type:'Sphere'})*4.058e13)))).toLocaleString()+' km²';
+  const safe=s=>String(s||'').replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));
+  const minimum=id=>ownership[id]?.bid?Math.max(ownership[id].bid+1,Math.ceil(ownership[id].bid*1.15)):100;
+  function adjacent(a,b){const A=byId.get(+a),B=byId.get(+b);if(!A||!B)return false;return d3.geoDistance(d3.geoCentroid(A),d3.geoCentroid(B))<0.52}
+  function touchesMine(id){return Object.entries(ownership).some(([k,v])=>v?.mine&&adjacent(k,id))}
+  function initials(name){return safe((name||'Brand').split(/\s+/).map(x=>x[0]).slice(0,2).join(''))}
+  function persist(){localStorage.setItem(key,JSON.stringify({ownership,profile}))}
+  const paths=g.selectAll('path.country').data(geo).join('path').attr('class',d=>`country ${ownership[d.id]?.mine?'mine':ownership[d.id]?'claimed':''}`).attr('d',path).attr('tabindex',0).attr('role','button').attr('aria-label',d=>countryName(+d.id)).on('click',(e,d)=>select(+d.id)).on('keydown',(e,d)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(+d.id)}});
+  function render(){
+    paths.attr('class',d=>`country ${ownership[d.id]?.mine?'mine':ownership[d.id]?'claimed':''}`).style('fill',d=>ownership[d.id]?.color||null);
+    g.selectAll('.brandPin').remove();
+    Object.entries(ownership).forEach(([id,ad])=>{const c=byId.get(+id);if(!c)return;const [x,y]=path.centroid(c);if(!Number.isFinite(x)||!Number.isFinite(y))return;const label=(ad.owner||'Brand').length>16?(ad.owner.slice(0,15)+'…'):ad.owner;const w=Math.max(48,label.length*5.5+18);const pin=g.append('g').attr('class','brandPin').attr('transform',`translate(${x},${y})`);pin.append('rect').attr('x',-w/2).attr('y',-10).attr('width',w).attr('height',20).attr('rx',6);pin.append('text').attr('text-anchor','middle').text(label)});
   }
-  function isAdjacentToMine(d){ return [...ownership.entries()].some(([id,v])=>v.owner==='ROGER' && id!==+d.id && adjacency(d,byId.get(id))); }
-  function selectCountry(d){
-    selected=d; countryPaths.classed('flash',x=>x===d); setTimeout(()=>countryPaths.classed('flash',false),700);
-    const id=+d.id, own=ownership.get(id), mine=own?.owner==='ROGER', neighbours=mine?0:[...ownership.entries()].filter(([oid,v])=>v.owner==='ROGER'&&adjacency(d,byId.get(oid))).length;
-    document.getElementById('selectedName').textContent=idToName[id]||`Country ${id}`;
-    document.getElementById('selectedOwner').innerHTML=own?`Controlled by <strong>${own.owner}</strong>`:'Currently unclaimed';
-    document.getElementById('selectedStatus').textContent=mine?'YOUR TERRITORY':own?'CLAIMED':'AVAILABLE';
-    document.getElementById('selectedArea').textContent=area[id]?area[id].toLocaleString()+' km²':'—';
-    document.getElementById('selectedNeighbours').textContent=neighbours;
-    const button=document.getElementById('claim');
-    const expandable=!own && (ownership.size===0 || isAdjacentToMine(d));
-    button.disabled=!!own || !expandable;
-    button.textContent=mine?'Already yours':own?'Occupied':expandable?'Claim territory':'Not connected';
-    document.getElementById('hint').textContent=mine?'This country is part of your territory.':own?'Another player controls this territory.':expandable?'This country touches your territory — you can expand here.':'You can only expand into territory connected to land you already own.';
+  function select(id){selectedId=id;const ad=ownership[id];document.getElementById('countryName').textContent=countryName(id);document.getElementById('area').textContent=areaText(id);document.getElementById('views').textContent=(ad?.views||Math.max(45000,Math.round((areas[id]||500000)*.065))).toLocaleString();document.getElementById('bid').textContent=ad?(ad.bid||0).toLocaleString()+' credits':'—';document.getElementById('adjacent').textContent=touchesMine(id)?'Yes':'No';
+    document.getElementById('status').innerHTML=ad?`<strong>${safe(ad.owner)}</strong> is advertising here.`:'Available advertising space — be the first advertiser.';
+    document.getElementById('adWrap').innerHTML=ad?`<div class="adCard"><div class="adTop"><div class="adLogo">${ad.logo?`<img src="${safe(ad.logo)}" alt="${safe(ad.owner)} logo" onerror="this.remove()">`:''}${initials(ad.owner)}</div><div><div class="adName">${safe(ad.owner)}</div><div class="adSite">${safe(ad.site||'No website')}</div></div></div><div class="adTag">${safe(ad.tag||'Advertising placement')}</div><div class="adStats"><div class="stat"><span>Owner</span><b>${ad.mine?'You':'Advertiser'}</b></div><div class="stat"><span>Type</span><b>Sponsored</b></div></div></div>`:'';
+    const b=document.getElementById('buy');b.disabled=false;if(ad?.mine){b.textContent='Your advertising space';b.className='cta secondary';document.getElementById('notice').innerHTML='<span class="green">You own this placement.</span> Grow the footprint by buying adjacent available countries.'}else if(ad){b.textContent=`Outbid for ${minimum(id).toLocaleString()} credits`;b.className='cta';document.getElementById('notice').innerHTML=`Current advertiser: <strong>${safe(ad.owner)}</strong> · Minimum winning bid: <strong>${minimum(id).toLocaleString()} credits</strong>.`}else{b.textContent='Advertise here';b.className='cta';document.getElementById('notice').innerHTML=touchesMine(id)?'<span class="green">Adjacent to your territory.</span> Add this placement to grow your footprint.':'Available to everyone. Start anywhere, then expand into adjacent space.'}
   }
-  document.getElementById('claim').addEventListener('click',()=>{
-    if(!selected)return; const id=+selected.id; if(ownership.has(id))return; if(!isAdjacentToMine(selected))return;
-    ownership.set(id,{owner:'ROGER',class:'mine'}); update(); selectCountry(selected); addFeed(`ROGER claimed ${idToName[id]||'new territory'}`); toast(`Territory claimed: ${idToName[id]||'country'}`);
-  });
-  function update(){countryPaths.attr('class',d=>`country ${ownership.get(+d.id)?.class||'unowned'}`); const mine=[...ownership.entries()].filter(([id,v])=>v.owner==='ROGER'); document.getElementById('claimedCount').textContent=ownership.size; document.getElementById('territoryCount').textContent=mine.reduce((n,[id])=>n+(area[id]||0),0).toLocaleString()+' km²';}
-  function addFeed(text){const feed=document.getElementById('feed');const item=document.createElement('div');item.className='feed-item';item.innerHTML='<i class="dot"></i><span>'+text+'</span>';feed.prepend(item);while(feed.children.length>4)feed.lastChild.remove()}
-  function toast(text){const t=document.getElementById('toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
-  ['NORTHSTAR took France','ATLAS expanded into Italy','PACIFIC claimed Japan','NOVA connected Brazil + Argentina'].forEach(addFeed); update();
-  const zoom=d3.zoom().scaleExtent([1,8]).on('zoom',e=>{transform=e.transform;g.attr('transform',e.transform)}); d3.select(svg).call(zoom);
-  document.getElementById('zoomIn').onclick=()=>d3.select(svg).transition().call(zoom.scaleBy,1.45);document.getElementById('zoomOut').onclick=()=>d3.select(svg).transition().call(zoom.scaleBy,.69);document.getElementById('reset').onclick=()=>d3.select(svg).transition().call(zoom.transform,d3.zoomIdentity);
-  window.addEventListener('resize',()=>{});
+  function openAd(){if(selectedId==null||ownership[selectedId]?.mine)return;const ad=ownership[selectedId], min=minimum(selectedId);document.getElementById('adTitle').textContent=`${ad?'Outbid':'Advertise'} in ${countryName(selectedId)}`;document.getElementById('adSub').textContent=ad?`Outbid ${safe(ad.owner)} and place your brand here.`:'Make this country your advertising placement.';document.getElementById('brandName').value=profile.name;document.getElementById('website').value=profile.site;document.getElementById('logoUrl').value=profile.logo;document.getElementById('tagline').value=profile.tag;document.getElementById('bidInput').min=min;document.getElementById('bidInput').value=min;document.getElementById('bidHint').textContent=ad?`Current bid ${ad.bid.toLocaleString()} credits · minimum winning bid ${min.toLocaleString()} credits.`:`Opening bid ${min.toLocaleString()} credits.`;preview();open('adModal')}
+  function preview(){const n=document.getElementById('brandName').value.trim()||'Your brand',s=document.getElementById('website').value.trim()||'yoursite.com',l=document.getElementById('logoUrl').value.trim();document.getElementById('previewName').textContent=n;document.getElementById('previewSite').textContent=s;document.getElementById('previewLogo').innerHTML=l?`<img src="${safe(l)}" alt="Preview" onerror="this.remove()">${initials(n)}`:initials(n)}
+  function open(id){const e=document.getElementById(id);e.classList.add('open');e.setAttribute('aria-hidden','false')}function close(id){const e=document.getElementById(id);e.classList.remove('open');e.setAttribute('aria-hidden','true')}
+  document.getElementById('buy').addEventListener('click',()=>{if(!ownership[selectedId]?.mine)openAd()});
+  document.getElementById('adForm').addEventListener('submit',e=>{e.preventDefault();if(selectedId==null)return;const name=document.getElementById('brandName').value.trim(),site=document.getElementById('website').value.trim(),logo=document.getElementById('logoUrl').value.trim(),tag=document.getElementById('tagline').value.trim(),bid=Number(document.getElementById('bidInput').value),min=minimum(selectedId);if(!name||!site||!Number.isFinite(bid)||bid<min)return;if(bid>credits){toast(`Demo balance is ${credits.toLocaleString()} credits.`);return}const previous=ownership[selectedId];ownership[selectedId]={owner:name,site,logo,tag,bid,views:previous?.views||Math.max(45000,Math.round((areas[selectedId]||500000)*.065)),mine:true,color:'#e9ecf0',previousOwner:previous?.owner||null};credits-=bid;profile={name,site,logo,tag};persist();render();updateBalance();addFeed(previous?`${name} outbid ${previous.owner} in ${countryName(selectedId)}`:`${name} bought ${countryName(selectedId)}`);close('adModal');select(selectedId);toast(previous?`Outbid ${previous.owner} — you now own ${countryName(selectedId)}.`:`${countryName(selectedId)} is now your advertising space.`)});
+  document.getElementById('profileForm').addEventListener('submit',e=>{e.preventDefault();profile={name:document.getElementById('profileName').value.trim(),site:document.getElementById('profileSite').value.trim(),logo:document.getElementById('profileLogo').value.trim(),tag:document.getElementById('profileTag').value.trim()};persist();updateBalance();close('profileModal');toast('Advertiser profile saved')});
+  document.getElementById('profileBtn').onclick=()=>{document.getElementById('profileName').value=profile.name;document.getElementById('profileSite').value=profile.site;document.getElementById('profileLogo').value=profile.logo;document.getElementById('profileTag').value=profile.tag;open('profileModal')};
+  document.getElementById('advertiseBtn').onclick=()=>{selectedId=selectedId||840;select(selectedId);openAd()};document.getElementById('howBtn').onclick=()=>open('howModal');
+  ['brandName','website','logoUrl'].forEach(id=>document.getElementById(id).addEventListener('input',preview));
+  document.getElementById('closeAd').onclick=()=>close('adModal');document.getElementById('cancelAd').onclick=()=>close('adModal');document.getElementById('closeProfile').onclick=()=>close('profileModal');document.getElementById('cancelProfile').onclick=()=>close('profileModal');document.getElementById('closeHow').onclick=()=>close('howModal');document.getElementById('closeHow2').onclick=()=>close('howModal');document.querySelectorAll('.modalBack').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modalBack.open').forEach(m=>m.classList.remove('open'))});
+  const zoom=d3.zoom().scaleExtent([1,8]).on('zoom',e=>g.attr('transform',e.transform));d3.select('#map').call(zoom);document.getElementById('zoomIn').onclick=()=>d3.select('#map').transition().duration(220).call(zoom.scaleBy,1.45);document.getElementById('zoomOut').onclick=()=>d3.select('#map').transition().duration(220).call(zoom.scaleBy,.69);document.getElementById('reset').onclick=()=>d3.select('#map').transition().duration(220).call(zoom.transform,d3.zoomIdentity);
+  function updateBalance(){document.getElementById('balance').textContent=`Demo balance · ${credits.toLocaleString()} credits`;document.getElementById('profileBtn').textContent=profile.name?profile.name.toUpperCase():'YOUR BRAND'}
+  function addFeed(text){const el=document.createElement('div');el.className='feedItem';el.innerHTML='<i class="feedDot"></i><span>'+safe(text)+'</span>';const feed=document.getElementById('feed');feed.prepend(el);while(feed.children.length>5)feed.lastElementChild.remove()}
+  function toast(text){const old=document.querySelector('.toastPop');if(old)old.remove();const el=document.createElement('div');el.className='toastPop';el.textContent=text;el.style.cssText='position:fixed;z-index:100;left:50%;top:78px;transform:translateX(-50%);background:#f3f4f6;color:#090a0c;border:1px solid #2f343c;border-radius:999px;padding:10px 14px;font:800 11px Inter,system-ui;box-shadow:0 12px 40px rgba(0,0,0,.35)';document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}
+  ['VASTLY just outbid a travel brand','ATLAS TRAVEL expanded into France','FORGE secured Germany','ORBITAL bought Japan','New advertising space opened in Portugal'].forEach(addFeed);
+  render();updateBalance();select(840);
 })();
 </script>
 </body>
