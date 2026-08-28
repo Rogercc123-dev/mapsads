@@ -1,6 +1,11 @@
 [build]
   publish = "."
 
+[[redirects]]
+  from = "/"
+  to = "/worldbid.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
