@@ -1,0 +1,1 @@
+MapsAds is intentionally map-first. Advertiser identity is represented once per advertiser, above the map in the market showcase and once on the map at the centre of their footprint. The prototype starts with zero advertisers and zero claims.
