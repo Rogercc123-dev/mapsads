@@ -1,1 +1,0 @@
-The map-first advertising redesign is being committed through the Git tree. This file is temporary and can be removed after the main page commit.
