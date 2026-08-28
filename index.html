@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MapsAds — claim and grow territory across the world." />
+  <title>MapsAds — Own the World</title>
+  <style>
+    :root{--bg:#08090b;--panel:#101216;--panel2:#15171c;--line:#292d35;--text:#f3f4f6;--muted:#8b919c;--accent:#fff;--mine:#f5f5f5;--mine2:#bfc3ca;--danger:#ff6b6b;--green:#62d996}
+    *{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit;color:inherit}body{overflow:hidden}
+    .app{height:100%;display:grid;grid-template-rows:64px 1fr}.top{display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:rgba(8,9,11,.94);z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}.mark{width:27px;height:27px;border:2px solid #fff;border-radius:7px;display:grid;place-items:center;font-size:12px}.brand span{font-size:18px}.stats{display:flex;gap:24px;align-items:center}.stat{display:flex;gap:7px;align-items:baseline}.stat b{font-size:14px}.stat small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.profile{border:1px solid var(--line);background:var(--panel);padding:8px 12px;border-radius:9px;font-size:12px;font-weight:700}
+    .workspace{position:relative;min-height:0}.map-wrap{position:absolute;inset:0;background:radial-gradient(circle at 50% 44%,#15181d 0,#0d0f13 48%,#08090b 100%)}svg{width:100%;height:100%;display:block;cursor:grab}svg.dragging{cursor:grabbing}.country{stroke:#3b3f47;stroke-width:.55px;vector-effect:non-scaling-stroke;transition:fill .18s,stroke .18s,filter .18s;cursor:pointer}.country:hover{stroke:#fff;stroke-width:1px;filter:brightness(1.3)}.country.mine{stroke:#fff;stroke-width:1px}.country.enemy{opacity:.95}.country.unowned{fill:#252931}.country.mine{fill:#dfe2e7}.country.enemy-a{fill:#6b3a45}.country.enemy-b{fill:#3d5870}.country.enemy-c{fill:#665438}.country.enemy-d{fill:#3f6653}.country.enemy-e{fill:#5c4b75}.country.flash{animation:flash .7s ease}@keyframes flash{50%{filter:brightness(2.2)}}
+    .side{position:absolute;right:18px;top:18px;width:315px;max-height:calc(100% - 36px);background:rgba(16,18,22,.96);border:1px solid var(--line);border-radius:13px;backdrop-filter:blur(12px);overflow:hidden;box-shadow:0 14px 45px rgba(0,0,0,.35)}.side-head{padding:18px 18px 14px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase}.country-name{font-size:25px;font-weight:800;letter-spacing:-.04em;margin-top:4px}.owner{margin-top:6px;color:var(--muted);font-size:12px}.owner strong{color:var(--text)}.side-body{padding:16px 18px}.kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid #202329;font-size:12px}.kv span:first-child{color:var(--muted)}.action{width:100%;margin-top:15px;border:0;border-radius:9px;padding:12px 14px;background:#f3f4f6;color:#090a0c;font-weight:800;cursor:pointer}.action:disabled{opacity:.35;cursor:not-allowed}.hint{font-size:11px;color:var(--muted);line-height:1.5;margin-top:9px}.activity{border-top:1px solid var(--line);padding:13px 18px}.activity-title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:9px}.feed{display:flex;flex-direction:column;gap:9px}.feed-item{font-size:11px;color:#c3c7ce;display:flex;gap:7px;line-height:1.35}.dot{width:5px;height:5px;border-radius:50%;background:#fff;margin-top:5px;flex:0 0 auto}
+    .legend{position:absolute;left:18px;bottom:18px;background:rgba(16,18,22,.9);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:10px;color:var(--muted);display:flex;gap:15px}.legend-item{display:flex;gap:6px;align-items:center}.swatch{width:9px;height:9px;border-radius:2px}.swatch.mine{background:#dfe2e7}.swatch.other{background:#6b3a45}.swatch.free{background:#252931}
+    .zoom{position:absolute;left:18px;top:18px;display:flex;flex-direction:column;background:rgba(16,18,22,.92);border:1px solid var(--line);border-radius:9px;overflow:hidden}.zoom button{width:38px;height:38px;background:transparent;border:0;border-bottom:1px solid var(--line);cursor:pointer;font-size:19px}.zoom button:last-child{border-bottom:0}.zoom button:hover{background:#1a1d23}
+    .toast{position:absolute;left:50%;top:82px;transform:translateX(-50%) translateY(-10px);background:#f3f4f6;color:#090a0c;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:800px){.stats{display:none}.top{padding:0 14px}.side{left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:45%}.legend{display:none}.zoom{top:12px;left:12px}}
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand"><div class="mark">M</div><span>mapsads</span></div>
+    <div class="stats"><div class="stat"><b id="claimedCount">0</b><small>claimed</small></div><div class="stat"><b id="territoryCount">0 km²</b><small>your territory</small></div><div class="stat"><b id="onlineCount">1,284</b><small>online</small></div></div>
+    <button class="profile" type="button">ROGER · 0 COINS</button>
+  </header>
+  <main class="workspace">
+    <div class="map-wrap"><svg id="map" viewBox="0 0 1200 650" role="img" aria-label="Interactive world territory map"></svg></div>
+    <div class="zoom"><button id="zoomIn" type="button" aria-label="Zoom in">+</button><button id="zoomOut" type="button" aria-label="Zoom out">−</button><button id="reset" type="button" aria-label="Reset map">⌂</button></div>
+    <aside class="side" aria-live="polite">
+      <div class="side-head"><div class="eyebrow">Territory</div><div class="country-name" id="selectedName">Select a country</div><div class="owner" id="selectedOwner">Click anywhere on the map to inspect it.</div></div>
+      <div class="side-body">
+        <div class="kv"><span>Status</span><b id="selectedStatus">—</b></div>
+        <div class="kv"><span>Area</span><b id="selectedArea">—</b></div>
+        <div class="kv"><span>Neighbours owned</span><b id="selectedNeighbours">—</b></div>
+        <button class="action" id="claim" type="button" disabled>Claim territory</button>
+        <div class="hint" id="hint">Choose a free country to start building your territory. Expansion is limited to countries touching your existing land.</div>
+      </div>
+      <div class="activity"><div class="activity-title">Live activity</div><div class="feed" id="feed"></div></div>
+    </aside>
+    <div class="legend"><div class="legend-item"><i class="swatch mine"></i>Your land</div><div class="legend-item"><i class="swatch other"></i>Claimed</div><div class="legend-item"><i class="swatch free"></i>Available</div></div>
+    <div class="toast" id="toast"></div>
+  </main>
+</div>
+<script type="module">
+(async()=>{
+  const root=document.getElementById('app');
+  const svg=document.getElementById('map');
+  const d3=await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
+  const topo=await import('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm');
+  const world=await import('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json/+esm');
+  const countries=topo.feature(world.default,world.default.objects.countries).features;
+  const projection=d3.geoNaturalEarth1().fitExtent([[15,18],[1185,632]],{type:'Sphere'});
+  const path=d3.geoPath(projection);
+  const g=d3.select(svg).append('g');
+  const defs=d3.select(svg).append('defs');
+  defs.append('filter').attr('id','countryShadow').append('feDropShadow').attr('dx',0).attr('dy',1).attr('stdDeviation',1.5).attr('flood-opacity',.25);
+  const names={};
+  // ISO numeric IDs for seeded prototype ownership.
+  const seed={372:{owner:'ROGER',class:'mine'},826:{owner:'NORTHSTAR',class:'enemy-a'},250:{owner:'NORTHSTAR',class:'enemy-a'},724:{owner:'NORTHSTAR',class:'enemy-a'},276:{owner:'ATLAS',class:'enemy-b'},380:{owner:'ATLAS',class:'enemy-b'},156:{owner:'PACIFIC',class:'enemy-c'},392:{owner:'PACIFIC',class:'enemy-c'},36:{owner:'ORBIT',class:'enemy-d'},554:{owner:'ORBIT',class:'enemy-d'},76:{owner:'NOVA',class:'enemy-e'},32:{owner:'NOVA',class:'enemy-e'}};
+  const area={372:70273,826:243610,250:551695,724:505990,276:357022,380:301340,156:9596961,392:377975,36:7692024,554:268021,76:8515767,32:2780400};
+  const idToName={372:'Ireland',826:'United Kingdom',250:'France',724:'Spain',276:'Germany',380:'Italy',156:'China',392:'Japan',36:'Australia',554:'New Zealand',76:'Brazil',32:'Argentina'};
+  const byId=new Map(countries.map(c=>[+c.id,c]));
+  const ownership=new Map(Object.entries(seed).map(([id,v])=>[+id,v]));
+  let selected=null; let transform=d3.zoomIdentity;
+  const projectionBounds=projection;
+  const countryPaths=g.selectAll('path.country').data(countries).join('path').attr('class',d=>`country ${ownership.get(+d.id)?.class||'unowned'}`).attr('d',path).attr('tabindex',0).attr('role','button').attr('aria-label',d=>idToName[d.id]||`Country ${d.id}`).on('click',(e,d)=>selectCountry(d)).on('keydown',(e,d)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCountry(d)}});
+  function adjacency(a,b){
+    // TopoJSON geometries can be compared using a small geographic distance between representative centroids.
+    // For this prototype, use shared boundary via polygon bbox proximity + centroid distance, with a generous threshold.
+    const ca=d3.geoCentroid(a), cb=d3.geoCentroid(b); const dist=d3.geoDistance(ca,cb); return dist<0.55;
+  }
+  function isAdjacentToMine(d){ return [...ownership.entries()].some(([id,v])=>v.owner==='ROGER' && id!==+d.id && adjacency(d,byId.get(id))); }
+  function selectCountry(d){
+    selected=d; countryPaths.classed('flash',x=>x===d); setTimeout(()=>countryPaths.classed('flash',false),700);
+    const id=+d.id, own=ownership.get(id), mine=own?.owner==='ROGER', neighbours=mine?0:[...ownership.entries()].filter(([oid,v])=>v.owner==='ROGER'&&adjacency(d,byId.get(oid))).length;
+    document.getElementById('selectedName').textContent=idToName[id]||`Country ${id}`;
+    document.getElementById('selectedOwner').innerHTML=own?`Controlled by <strong>${own.owner}</strong>`:'Currently unclaimed';
+    document.getElementById('selectedStatus').textContent=mine?'YOUR TERRITORY':own?'CLAIMED':'AVAILABLE';
+    document.getElementById('selectedArea').textContent=area[id]?area[id].toLocaleString()+' km²':'—';
+    document.getElementById('selectedNeighbours').textContent=neighbours;
+    const button=document.getElementById('claim');
+    const expandable=!own && (ownership.size===0 || isAdjacentToMine(d));
+    button.disabled=!!own || !expandable;
+    button.textContent=mine?'Already yours':own?'Occupied':expandable?'Claim territory':'Not connected';
+    document.getElementById('hint').textContent=mine?'This country is part of your territory.':own?'Another player controls this territory.':expandable?'This country touches your territory — you can expand here.':'You can only expand into territory connected to land you already own.';
+  }
+  document.getElementById('claim').addEventListener('click',()=>{
+    if(!selected)return; const id=+selected.id; if(ownership.has(id))return; if(!isAdjacentToMine(selected))return;
+    ownership.set(id,{owner:'ROGER',class:'mine'}); update(); selectCountry(selected); addFeed(`ROGER claimed ${idToName[id]||'new territory'}`); toast(`Territory claimed: ${idToName[id]||'country'}`);
+  });
+  function update(){countryPaths.attr('class',d=>`country ${ownership.get(+d.id)?.class||'unowned'}`); const mine=[...ownership.entries()].filter(([id,v])=>v.owner==='ROGER'); document.getElementById('claimedCount').textContent=ownership.size; document.getElementById('territoryCount').textContent=mine.reduce((n,[id])=>n+(area[id]||0),0).toLocaleString()+' km²';}
+  function addFeed(text){const feed=document.getElementById('feed');const item=document.createElement('div');item.className='feed-item';item.innerHTML='<i class="dot"></i><span>'+text+'</span>';feed.prepend(item);while(feed.children.length>4)feed.lastChild.remove()}
+  function toast(text){const t=document.getElementById('toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+  ['NORTHSTAR took France','ATLAS expanded into Italy','PACIFIC claimed Japan','NOVA connected Brazil + Argentina'].forEach(addFeed); update();
+  const zoom=d3.zoom().scaleExtent([1,8]).on('zoom',e=>{transform=e.transform;g.attr('transform',e.transform)}); d3.select(svg).call(zoom);
+  document.getElementById('zoomIn').onclick=()=>d3.select(svg).transition().call(zoom.scaleBy,1.45);document.getElementById('zoomOut').onclick=()=>d3.select(svg).transition().call(zoom.scaleBy,.69);document.getElementById('reset').onclick=()=>d3.select(svg).transition().call(zoom.transform,d3.zoomIdentity);
+  window.addEventListener('resize',()=>{});
+})();
+</script>
+</body>
+</html>
