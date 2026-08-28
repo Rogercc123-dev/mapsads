@@ -1,0 +1,1 @@
+The map-first advertising UI has been rebuilt with a single advertiser identity above the map and clean clustered markers on the map.
